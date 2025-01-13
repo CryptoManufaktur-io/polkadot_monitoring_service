@@ -1,0 +1,50 @@
+version: '3.4'
+
+services:
+  polkadot_common_exporter:
+    build:
+      context: ./exporters/common
+      args:
+        exporter: "common_exporter"
+    ports:
+      - 9161:9150
+    environment:
+      - "LISTEN=0.0.0.0"
+      - "PORT=9150" 
+      - "CHAIN=${NETWORK}"
+    env_file:
+      - ./custom-polkadot.env
+    networks:
+      - exporters
+      - default
+    restart: unless-stopped
+
+  polkadot_finality_exporter:
+    build:
+      context: ./exporters/common
+      args:
+        exporter: "finality_exporter"
+    ports:
+      - 9162:9150
+    environment:
+      - "LISTEN=0.0.0.0"
+      - "PORT=9150"
+      - "CHAIN=${NETWORK}"
+    env_file:
+      - ./custom-polkadot.env
+    networks:
+      - exporters
+      - default
+    restart: unless-stopped
+
+  polkadot_events_exporter:
+    build:
+      context: ./exporters/events
+    ports:
+      - 9163:9150
+    networks:
+      - exporters
+      - default
+    env_file:
+      - ./custom-polkadot.env
+    restart: unless-stopped

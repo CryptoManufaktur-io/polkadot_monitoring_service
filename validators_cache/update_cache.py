@@ -38,15 +38,16 @@ if __name__ == '__main__':
     redis_port = int(os.environ.get('redis_port', 6379))
     redis_password = os.environ.get('redis_password', None)
     sleep_time = int(os.environ.get('sleep_time', 300))
-    prom_label_values_url = os.environ.get('prom_label_values_url', 'http://prometheus:9090/api/v1/label/account/values')
+    # prom_label_values_url = os.environ.get('prom_label_values_url', 'http://prometheus:9090/api/v1/label/account/values')
 
-    validators_from_prom = get_from_prom(prom_label_values_url)
+    # validators_from_prom = get_from_prom(prom_label_values_url)
     if cache_is_cold(redis_host, redis_port, redis_password):
         validators_from_file = get_from_file('./validators.txt')
     else:
         validators_from_file = []
 
-    data = validators_from_prom
+    # data = validators_from_prom
+    data = []
     
     for i in validators_from_file:
         if i not in data:

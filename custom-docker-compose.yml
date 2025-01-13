@@ -1,0 +1,46 @@
+version: '3.4'
+
+services:
+  redis:
+    image: redis:latest
+    command: ["redis-server"]
+    ports:
+      - "6379:6379"
+    networks:
+      - monitoring
+      - default
+    restart: unless-stopped
+
+  validators_cache:
+    build:
+      context: ./validators_cache
+    networks:
+      - redis
+      - monitoring
+      - default
+    restart: unless-stopped
+
+  github_release_exporter:
+    build:
+      context: ./exporters/github_release
+    ports:
+      - 9160:9150
+    environment:
+      - "LISTEN=0.0.0.0"
+      - "PORT=9150"
+    networks:
+      - exporters
+      - default
+    restart: unless-stopped
+
+volumes:
+    prometheus_data: {}
+    prometheus_rules: {}
+    grafana_data: {}
+    alertmanager-data: {}
+    pgadmin: {}
+
+networks:
+  exporters: 
+  monitoring:
+  redis:
