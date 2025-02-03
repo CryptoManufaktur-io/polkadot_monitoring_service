@@ -4,3 +4,4 @@ sandbox/
 bot/app/webserver/test.py
 postgres/
 prometheus/rules/
+.env

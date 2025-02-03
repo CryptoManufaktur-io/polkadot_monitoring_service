@@ -59,6 +59,7 @@ def get_era_points(data):
 def get_chain_info(chain, substrate_interface):
     constants = {
         'polkadot': {'session_length': 2400, 'era_length': 14400},
+        'westend': {'session_length': 2400, 'era_length': 14400},
         'kusama': {'session_length': 600, 'era_length': 3600}
     }
 
