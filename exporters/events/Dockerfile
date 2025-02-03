@@ -10,10 +10,28 @@ COPY --from=linter /build/go.mod /build/go.sum ./
 RUN go mod download && go mod verify
 
 COPY --from=linter /build/ .
-RUN \
-  go build -v -o events-exporter ./cmd/events-exporter/
+RUN go build -v -o events-exporter ./cmd/events-exporter/
 
 FROM alpine:3.19
+
+ARG USER=exporter
+ARG UID=10005
+
+# See https://stackoverflow.com/a/55757473/12429735RUN
+RUN adduser \
+    --disabled-password \
+    --gecos "" \
+    --shell "/sbin/nologin" \
+    --uid "${UID}" \
+    "${USER}"
+
 COPY --from=builder /build/events-exporter /app/
+
+# Belt and suspenders
+RUN chown -R ${USER}:${USER} /app
+
 WORKDIR /app
+
+USER ${USER}
+
 ENTRYPOINT ["/app/events-exporter"]
