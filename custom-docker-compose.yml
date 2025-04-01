@@ -4,8 +4,6 @@ services:
   redis:
     image: redis:latest
     command: ["redis-server"]
-    ports:
-      - "6379:6379"
     networks:
       - monitoring
       - default
@@ -23,8 +21,6 @@ services:
   github_release_exporter:
     build:
       context: ./exporters/github_release
-    ports:
-      - 9160:9150
     environment:
       - "LISTEN=0.0.0.0"
       - "PORT=9150"
@@ -32,6 +28,13 @@ services:
       - exporters
       - default
     restart: unless-stopped
+    labels:
+      - traefik.enable=false
+      - metrics.scrape=true
+      - metrics.path=/metrics
+      - metrics.port=9150
+      - metrics.instance=polkadot
+      - metrics.network=${NETWORK}
 
 volumes:
     prometheus_data: {}
