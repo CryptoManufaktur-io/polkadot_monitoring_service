@@ -37,7 +37,7 @@ if __name__ == '__main__':
     redis_host = os.environ.get('redis_host', 'redis')
     redis_port = int(os.environ.get('redis_port', 6379))
     redis_password = os.environ.get('redis_password', None)
-    sleep_time = int(os.environ.get('sleep_time', 300))
+    sleep_time = int(os.environ.get('sleep_time', 600))
     # prom_label_values_url = os.environ.get('prom_label_values_url', 'http://prometheus:9090/api/v1/label/account/values')
 
     # validators_from_prom = get_from_prom(prom_label_values_url)
